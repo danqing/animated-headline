@@ -1,0 +1,12 @@
+{
+  "name": "animated-headline",
+  "version": "0.1.0",
+  "description": "Animated headline",
+  "repository": "danqing/animated-headline",
+  "author": "Danqing Liu",
+  "license": "MIT",
+  "main": "headline.js",
+  "keywords": ["animated", "headline"],
+  "devDependencies": {},
+  "dependencies": {}
+}
