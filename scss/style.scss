@@ -1,49 +1,6 @@
 @import 'layout';
 @import 'mixin';
 
-.ah-title {
-	position: relative;
-	height: 160px;
-	line-height: 230px;
-	text-align: center;
-
-	h1 {
-		font-size: 2.4rem;
-		font-weight: 700;
-	}
-
-	@include MQ(M) {
-		line-height: 250px;
-	}
-
-	@include MQ(L) {
-		height: 200px;
-		line-height: 300px;
-
-		h1 {
-			font-size: 3rem;
-		}
-	}
-}
-
-.ah-intro {
-	width: 90%;
-	max-width: $M;
-	text-align: center;
-}
-
-.ah-intro {
-	margin: 4em auto;
-
-	@include MQ(M) {
-		margin: 5em auto;
-	}
-
-	@include MQ(L) {
-		margin: 6em auto;
-	}
-}
-
 .ah-headline {
 	font-size: 3rem;
 	line-height: 1.2;
