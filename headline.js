@@ -19,10 +19,16 @@ export default class Headline {
     this.wordsWrapperEl = el.querySelector('.ah-words-wrapper');
     this.optionEls = this.wordsWrapperEl.querySelectorAll('.ah-option');
 
-    this.isType = this.el.classList.contains('ah-type');
-    this.isClip = this.el.classList.contains('ah-clip');
-    this.isLetters = this.el.classList.contains('ah-letters');
-    this.isLoadingBar = this.el.classList.contains('ah-loading-bar');
+    this.mode = '';
+    if (this.el.classList.contains('ah-type')) {
+      this.mode = 'type';
+    } else if (this.el.classList.contains('ah-clip')) {
+      this.mode = 'clip';
+    } else if (this.el.classList.contains('ah-letters')) {
+      this.mode = 'letters';
+    } else if (this.el.classList.contains('ah-loading-bar')) {
+      this.mode = 'loadingbar';
+    }
 
     this.wordIndex = 0;
 
@@ -63,18 +69,18 @@ export default class Headline {
     var duration = TIMING.ANIMATION_DELAY;
     const wwEl = this.wordsWrapperEl;
 
-    if (this.el.classList.contains('loading-bar')) {
+    if (this.mode === 'loadingbar') {
       duration = TIMING.BAR_ANIMATION_DELAY;
       setTimeout(() => {
         wwEl.classList.add('ah-loading');
       }, TIMING.BAR_WAITING);
     }
 
-    else if (this.isClip) {
+    else if (this.mode === 'clip') {
       wwEl.style.width = wwEl.offsetWidth + 10 + 'px';
     }
 
-    else if (!this.isType) {
+    else if (this.mode !== 'type') {
       let width = 0;
       for (let option of this.optionEls) {
         width = Math.max(width, option.offsetWidth);
@@ -98,13 +104,16 @@ export default class Headline {
       this.wordIndex++;
     }
 
-    if (this.isType) {
-      this.wordsWrapperEl.classList.add('ah-selected');
-      this.wordsWrapperEl.classList.remove('ah-waiting');
+    if (this.mode === 'type') {
+      this.cssToggle(this.wordsWrapperEl, 'ah-selected', 'ah-waiting');
 
       setTimeout(() => {
         this.wordsWrapperEl.classList.remove('ah-selected');
-        $word.removeClass('is-visible').addClass('is-hidden').children('i').removeClass('in').addClass('out');
+        this.cssToggle(wordEl, 'ah-hidden', 'ah-visible');
+        let is = wordEl.querySelectorAll('i');
+        for (let i of is) {
+          this.cssToggle(i, 'ah-out', 'ah-in');
+        }
       }, TIMING.SELECTION_DURATION);
 
       setTimeout(() => {
@@ -112,20 +121,20 @@ export default class Headline {
       }, TIMING.TYPE_ANIMATION_DELAY);
     }
 
-    else if (this.isLetters) {
+    else if (this.mode === 'letters') {
       var bool = ($word.children('i').length >= nextWord.children('i').length) ? true : false;
       hideLetter($word.find('i').eq(0), $word, bool, lettersDelay);
       showLetter(nextWord.find('i').eq(0), nextWord, bool, lettersDelay);
     }
 
-    else if (this.isClip) {
+    else if (this.mode === 'clip') {
       this.wordsWrapperEl.animate({ width : '2px' }, revealDuration, function(){
         this.switchWord(wordEl, nextEl);
         this.showWord(nextEl);
       });
     }
 
-    else if (this.isLoadingBar) {
+    else if (this.mode === 'loadingbar') {
       this.wordsWrapperEl.classList.remove('ah-loading');
       this.switchWord(wordEl, nextEl);
 
@@ -146,49 +155,50 @@ export default class Headline {
     }
   }
 
-  showWord($word, $duration) {
+  showWord(wordEl, duration) {
     if (this.isType) {
-      showLetter($word.find('i').eq(0), $word, false, $duration);
-      $word.addClass('is-visible').removeClass('is-hidden');
+      showLetter($word.find('i').eq(0), $word, false, duration);
+      this.cssToggle(wordEl, 'ah-visible', 'ah-hidden');
     }
 
     else if (this.isClip) {
-      this.wordsWrapperEl.animate({ 'width' : $word.width() + 10 }, revealDuration, function(){
-        setTimeout(function(){ hideWord($word) }, revealAnimationDelay);
+      this.wordsWrapperEl.animate({ 'width' : $word.width() + 10 }, revealDuration, () => {
+        setTimeout(() => {
+          this.hideWord(wordEl);
+        }, TIMING.REVEAL_ANIMATION_DELAY);
       });
     }
   }
 
   hideLetter(letterEl, $word, $bool, duration) {
-    letterEl.classList.remove('ah-in');
-    letterEl.classList.add('ah-out');
+    this.cssToggle(letterEl, 'ah-out', 'ah-in');
 
     if (!$letter.is(':last-child')) {
       setTimeout(() => {
-        hideLetter($letter.next(), $word, $bool, duration);
+        this.hideLetter($letter.next(), $word, $bool, duration);
       }, duration);
-    } else if ($bool) {
+    }
+
+    else if ($bool) {
       setTimeout(() => {
         this.hideWord(takeNext($word));
       }, animationDelay);
     }
-
-    if ($letter.is(':last-child') && $('html').hasClass('no-csstransitions')) {
-      var nextWord = takeNext($word);
-      switchWord($word, nextWord);
-    }
   }
 
-  showLetter($letter, $word, $bool, $duration) {
-    $letter.addClass('in').removeClass('out');
+  /**
+   * Shows the specified letter.
+   */
+  showLetter(letterEl, $word, $bool, $duration) {
+    this.cssToggle(letterEl, 'ah-in', 'ah-out');
     if (!$letter.is(':last-child')) {
       setTimeout(() => {
         this.showLetter($letter.next(), $word, $bool, $duration);
       }, $duration);
     } else {
-      if (this.isType) {
+      if (this.mode === 'type') {
         setTimeout(() => {
-          $word.parents('.cd-words-wrapper').addClass('waiting');
+          this.wordsWrapperEl.classList.add('ah-waiting');
         }, 200);
       }
 
@@ -197,15 +207,25 @@ export default class Headline {
   }
 
   /**
+   * Adds a class and removes a class from a DOM element.
+   *
+   * @param {Element} el The element to manipulate.
+   * @param {string} add The class to add.
+   * @param {string} remove The class to remove.
+   */
+  cssToggle(el, add, remove) {
+    el.classList.remove(remove);
+    el.classList.add(add);
+  }
+
+  /**
    * Switches from the old word to the new word.
    *
-   * @param {Element} oldWord The old word element.
-   * @param {Element} newWord The new word element.
+   * @param {Element} oldWordEl The old word element.
+   * @param {Element} newWordEl The new word element.
    */
-  switchWord(oldWord, newWord) {
-    oldWord.classList.remove('ah-visible');
-    oldWord.classList.add('ah-hidden');
-    newWord.classList.remove('ah-hidden');
-    newWord.classList.add('ah-visible');
+  switchWord(oldWordEl, newWordEl) {
+    this.cssToggle(oldWordEl, 'ah-hidden', 'ah-visible');
+    this.cssToggle(newWordEl, 'ah-visible', 'ah-hidden');
   }
 }

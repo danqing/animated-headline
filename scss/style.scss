@@ -42,7 +42,7 @@
 
 	b {
 		opacity: 0;
-		@include transform-origin(50% 100%);
+		transform-origin: 50% 100%;
 		transform: rotateX(180deg);
 
 		&.ah-visible {
@@ -180,7 +180,7 @@
 
 	i, em {
 		display: inline-block;
-		@include backface-visibility(hidden);
+		backface-visibility: hidden;
 	}
 
 	b {
@@ -188,7 +188,7 @@
 	}
 
 	i {
-		@include transform-style(preserve-3d);
+		transform-style: preserve-3d;
 		transform: translateZ(-20px) rotateX(90deg);
 		opacity: 0;
 
@@ -260,7 +260,6 @@
 /** loading-bar */
 
 .ah-headline.loading-bar {
-
 	span {
 		display: inline-block;
 		padding: .2em 0;
@@ -401,7 +400,7 @@
 
 .ah-headline.zoom {
 	.ah-words-wrapper {
-		@include perspective(300px);
+		perspective: 300px;
 	}
 
 	b {
@@ -445,9 +444,8 @@
 /** rotate-3 */
 
 .ah-headline.rotate-3 {
-
 	.ah-words-wrapper {
-		@include perspective(300px);
+		perspective: 300px;
 	}
 
 	b {
@@ -457,7 +455,7 @@
 	i {
 		display: inline-block;
 		transform: rotateY(180deg);
-		@include backface-visibility(hidden);
+		backface-visibility: hidden;
 
 		.ah-visible & {
 			transform: rotateY(0deg);
