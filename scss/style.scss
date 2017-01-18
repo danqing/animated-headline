@@ -37,22 +37,22 @@
 
 .ah-headline.rotate-1 {
 	.ah-words-wrapper {
-		@include perspective(300px);
+		perspective: 300px;
 	}
 
 	b {
 		opacity: 0;
 		@include transform-origin(50% 100%);
-		@include transform(rotateX(180deg));
+		transform: rotateX(180deg);
 
 		&.ah-visible {
 			opacity: 1;
-			@include transform(rotateX(0deg));
+			transform: rotateX(0deg);
 			@include animation(ah-rotate-1-in 1.2s);
 		}
 
 		&.ah-hidden {
-			@include transform(rotateX(180deg));
+			transform: rotateX(180deg);
 			@include animation(ah-rotate-1-out 1.2s);
 		}
 	}
@@ -60,12 +60,12 @@
 
 @include keyframes(ah-rotate-1-in) {
 	0% {
-		@include transform(rotateX(180deg));
+		transform: rotateX(180deg);
 		opacity: 0;
 	}
 
 	35% {
-		@include transform(rotateX(120deg));
+		transform: rotateX(120deg);
 		opacity: 0;
 	}
 
@@ -74,19 +74,19 @@
 	}
 
 	100% {
-		@include transform(rotateX(360deg));
+		transform: rotateX(360deg);
 		opacity: 1;
 	}
 }
 
 @include keyframes(ah-rotate-1-out) {
 	0% {
-		@include transform(rotateX(0deg));
+		transform: rotateX(0deg);
 		opacity: 1;
 	}
 
 	35% {
-		@include transform(rotateX(-40deg));
+		transform: rotateX(-40deg);
 		opacity: 1;
 	}
 
@@ -95,7 +95,7 @@
 	}
 
 	100% {
-		@include transform(rotateX(180deg));
+		transform: rotateX(180deg);
 		opacity: 0;
 	}
 }
@@ -156,17 +156,17 @@
 
 @include keyframes(ah-pulse) {
 	0% {
-		@include transform(translateY(-50%) scale(1));
+		transform: translateY(-50%) scale(1);
 		opacity: 1;
 	}
 
 	40% {
-		@include transform(translateY(-50%) scale(0.9));
+		transform: translateY(-50%) scale(0.9);
 		opacity: 0;
 	}
 
 	100% {
-		@include transform(translateY(-50%) scale(0));
+		transform: translateY(-50%) scale(0);
 		opacity: 0;
 	}
 }
@@ -175,7 +175,7 @@
 
 .ah-headline.rotate-2 {
 	.ah-words-wrapper {
-		@include perspective(300px);
+		perspective: 300px;
 	}
 
 	i, em {
@@ -189,7 +189,7 @@
 
 	i {
 		@include transform-style(preserve-3d);
-		@include transform(translateZ(-20px) rotateX(90deg));
+		transform: translateZ(-20px) rotateX(90deg);
 		opacity: 0;
 
 		.ah-visible & {
@@ -206,16 +206,16 @@
 	}
 
 	em {
-		@include transform(translateZ(20px));
+		transform: translateZ(20px);
 	}
 }
 
 .no-csstransitions .ah-headline.rotate-2 i {
-	@include transform(rotateX(0deg));
+	transform: rotateX(0deg);
 	opacity: 0;
 
 	em {
-		@include transform(scale(1));
+		transform: scale(1);
 	}
 }
 
@@ -226,34 +226,34 @@
 @include keyframes(ah-rotate-2-in) {
 	0% {
 		opacity: 0;
-		@include transform(translateZ(-20px) rotateX(90deg));
+		transform: translateZ(-20px) rotateX(90deg);
 	}
 
 	60% {
 		opacity: 1;
-		@include transform(translateZ(-20px) rotateX(-10deg));
+		transform: translateZ(-20px) rotateX(-10deg);
 	}
 
 	100% {
 		opacity: 1;
-		@include transform(translateZ(-20px) rotateX(0deg));
+		transform: translateZ(-20px) rotateX(0deg));
 	}
 }
 
 @include keyframes(ah-rotate-2-out) {
 	0% {
 		opacity: 1;
-		@include transform(translateZ(-20px) rotateX(0));
+		transform: translateZ(-20px) rotateX(0);
 	}
 
 	60% {
 		opacity: 0;
-		@include transform(translateZ(-20px) rotateX(-100deg));
+		transform: translateZ(-20px) rotateX(-100deg);
 	}
 
 	100% {
 		opacity: 0;
-		@include transform(translateZ(-20px) rotateX(-90deg));
+		transform: translateZ(-20px) rotateX(-90deg);
 	}
 }
 
@@ -333,34 +333,34 @@
 @include keyframes(slide-in) {
 	0% {
 		opacity: 0;
-		@include transform(translateY(-100%));
+		transform: translateY(-100%);
 	}
 
 	60% {
 		opacity: 1;
-		@include transform(translateY(20%));
+		transform: translateY(20%);
 	}
 
 	100% {
 		opacity: 1;
-		@include transform(translateY(0));
+		transform: translateY(0);
 	}
 }
 
 @include keyframes(slide-out) {
 	0% {
 		opacity: 1;
-		@include transform(translateY(0));
+		transform: translateY(0);
 	}
 
 	60% {
 		opacity: 0;
-		@include transform(translateY(120%));
+		transform: translateY(120%);
 	}
 
 	100% {
 		opacity: 0;
-		@include transform(translateY(100%));
+		transform: translateY(100%);
 	}
 }
 
@@ -421,24 +421,24 @@
 @include keyframes(zoom-in) {
 	0% {
 		opacity: 0;
-		@include transform(translateZ(100px));
+		transform: translateZ(100px);
 	}
 
 	100% {
 		opacity: 1;
-		@include transform(translateZ(0));
+		transform: translateZ(0);
 	}
 }
 
 @include keyframes(zoom-out) {
 	0% {
 		opacity: 1;
-		@include transform(translateZ(0));
+		transform: translateZ(0);
 	}
 
 	100% {
 		opacity: 0;
-		@include transform(translateZ(-100px));
+		transform: translateZ(-100px);
 	}
 }
 
@@ -456,11 +456,11 @@
 
 	i {
 		display: inline-block;
-		@include transform(rotateY(180deg));
+		transform: rotateY(180deg);
 		@include backface-visibility(hidden);
 
 		.ah-visible & {
-			@include transform(rotateY(0deg));
+			transform: rotateY(0deg);
 		}
 
 		&.in {
@@ -474,7 +474,7 @@
 }
 
 .no-csstransitions .ah-headline.rotate-3 i {
-	@include transform(rotateY(0deg));
+	transform: rotateY(0deg);
 	opacity: 0;
 }
 
@@ -484,21 +484,21 @@
 
 @include keyframes(ah-rotate-3-in) {
 	0% {
-		@include transform(rotateY(180deg));
+		transform: rotateY(180deg);
 	}
 
 	100% {
-		@include transform(rotateY(0deg));
+		transform: rotateY(0deg);
 	}
 }
 
 @include keyframes(ah-rotate-3-out) {
 	0% {
-		@include transform(rotateY(0));
+		transform: rotateY(0);
 	}
 
 	100% {
-		@include transform(rotateY(-180deg));
+		transform: rotateY(-180deg);
 	}
 }
 
@@ -513,7 +513,7 @@
 	i {
 		display: inline-block;
 		opacity: 0;
-		@include transform(scale(0));
+		transform: scale(0);
 
 		.ah-visible & {
 			opacity: 1;
@@ -530,7 +530,7 @@
 }
 
 .no-csstransitions .ah-headline.scale i {
-	@include transform(scale(1));
+	transform: scale(1);
 	opacity: 0;
 }
 
@@ -540,29 +540,29 @@
 
 @include keyframes(scale-up) {
 	0% {
-		@include transform(scale(0));
+		transform: scale(0);
 		opacity: 0;
 	}
 
 	60% {
-		@include transform(scale(1.2));
+		transform: scale(1.2);
 		opacity: 1;
 	}
 
 	100% {
-		@include transform(scale(1));
+		transform: scale(1);
 		opacity: 1;
 	}
 }
 
 @include keyframes(scale-down) {
 	0% {
-		@include transform(scale(1));
+		transform: scale(1);
 		opacity: 1;
 	}
 
 	60% {
-		@include transform(scale(0));
+		transform: scale(0));
 		opacity: 0;
 	}
 }
@@ -587,33 +587,33 @@
 @include keyframes(push-in) {
 	0% {
 		opacity: 0;
-		@include transform(translateX(-100%));
+		transform: translateX(-100%));
 	}
 
 	60% {
 		opacity: 1;
-		@include transform(translateX(10%));
+		transform: translateX(10%);
 	}
 
 	100% {
 		opacity: 1;
-		@include transform(translateX(0));
+		transform: translateX(0);
 	}
 }
 
 @include keyframes(push-out) {
 	0% {
 		opacity: 1;
-		@include transform(translateX(0));
+		transform: translateX(0);
 	}
 
 	60% {
 		opacity: 0;
-		@include transform(translateX(110%));
+		transform: translateX(110%));
 	}
 
 	100% {
 		opacity: 0;
-		@include transform(translateX(100%));
+		transform: translateX(100%));
 	}
 }
