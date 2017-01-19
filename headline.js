@@ -93,8 +93,9 @@ export default class Headline {
     }, duration);
   }
 
-  hideWord(wordEl, nextWordEl) {
+  hideWord() {
     const wordEl = this.optionEls[this.wordIndex];
+
     var nextEl = null;
     if (this.wordIndex === this.optionEls.length - 1) {
       nextEl = this.optionEls[0];
@@ -122,7 +123,12 @@ export default class Headline {
     }
 
     else if (this.mode === 'letters') {
-      var bool = ($word.children('i').length >= nextWord.children('i').length) ? true : false;
+      const letterEls = wordEl.querySelectorAll('i');
+      const nextLetterEls = nextWordEl.querySelectorAll('i');
+      const currentLonger = letterEls.length >= nextLetterEls.length;
+
+      this.hideLetter(letterEls, wordEl, currentLonger, TIMING.LETTERS_DELAY);
+      var bool = $word.children('i').length >= nextWord.children('i').length;
       hideLetter($word.find('i').eq(0), $word, bool, lettersDelay);
       showLetter(nextWord.find('i').eq(0), nextWord, bool, lettersDelay);
     }
@@ -157,44 +163,56 @@ export default class Headline {
 
   showWord(wordEl, duration) {
     if (this.isType) {
-      showLetter($word.find('i').eq(0), $word, false, duration);
+      const letterEls = wordEl.querySelectorAll('i');
+      this.showLetter(letterEls, 0, wordEl, false, duration);
       this.cssToggle(wordEl, 'ah-visible', 'ah-hidden');
     }
 
     else if (this.isClip) {
       this.wordsWrapperEl.animate({ 'width' : $word.width() + 10 }, revealDuration, () => {
         setTimeout(() => {
-          this.hideWord(wordEl);
+          this.hideWord();
         }, TIMING.REVEAL_ANIMATION_DELAY);
       });
     }
   }
 
-  hideLetter(letterEl, $word, $bool, duration) {
-    this.cssToggle(letterEl, 'ah-out', 'ah-in');
+  /**
+   * Hides a letter.
+   *
+   * @param {Array} letterEls The list of letters.
+   * @param {number} index The index of the letter to hide.
+   * @param {Element} wordEl The word element.
+   * @param {boolean} currentLonger Whether the current word is longer than the
+   *     next word.
+   * @param {number} duration The animation duration.
+   */
+  hideLetter(letterEls, index, wordEl, currentLonger, duration) {
+    this.cssToggle(letterEls[index], 'ah-out', 'ah-in');
 
-    if (!$letter.is(':last-child')) {
+    if (index < letterEls.length - 1) {
       setTimeout(() => {
-        this.hideLetter($letter.next(), $word, $bool, duration);
+        this.hideLetter(letterEls, index + 1, wordEl, currentLonger, duration);
       }, duration);
     }
 
-    else if ($bool) {
+    else if (currentLonger) {
       setTimeout(() => {
         this.hideWord(takeNext($word));
-      }, animationDelay);
+      }, TIMING.ANIMATION_DELAY);
     }
   }
 
   /**
    * Shows the specified letter.
    */
-  showLetter(letterEl, $word, $bool, $duration) {
-    this.cssToggle(letterEl, 'ah-in', 'ah-out');
-    if (!$letter.is(':last-child')) {
+  showLetter(letterEls, index, wordEl, currentLonger, duration) {
+    this.cssToggle(letterEls[index], 'ah-in', 'ah-out');
+
+    if (index < letterEls.length - 1) {
       setTimeout(() => {
-        this.showLetter($letter.next(), $word, $bool, $duration);
-      }, $duration);
+        this.showLetter(letterEls, index + 1, wordEl, currentLonger, duration);
+      }, duration);
     } else {
       if (this.mode === 'type') {
         setTimeout(() => {
@@ -202,7 +220,11 @@ export default class Headline {
         }, 200);
       }
 
-      if(!$bool) { setTimeout(() => { hideWord($word) }, animationDelay) }
+      if (!currentLonger) {
+        setTimeout(() => {
+          this.hideWord(wordEl);
+        }, animationDelay);
+      }
     }
   }
 
