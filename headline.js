@@ -19,6 +19,7 @@ export default class Headline {
     this.wordsWrapperEl = el.querySelector('.ah-words-wrapper');
     this.optionEls = this.wordsWrapperEl.querySelectorAll('.ah-option');
 
+    // Animation mode.
     this.mode = '';
     if (this.el.classList.contains('ah-type')) {
       this.mode = 'type';
@@ -28,9 +29,15 @@ export default class Headline {
       this.mode = 'letters';
     } else if (this.el.classList.contains('ah-loading-bar')) {
       this.mode = 'loadingbar';
+    } else if (this.el.classList.contains('ah-rotate-2')) {
+      this.mode = 'rotate2';
     }
 
+    // Index of the current word (out of all possible words).
     this.wordIndex = 0;
+    // Whether to autoplay. If true, once the animation starts it will keep
+    // going automatically.
+    this.autoplay = true;
 
     if (this.el.classList.contains('letters')) {
       this.singleLetters();
@@ -39,8 +46,6 @@ export default class Headline {
 
   /** Singles out letters for letter-level animation. */
   singleLetters() {
-    const rotate2 = this.el.classList.contains('ah-rotate-2');
-
     for (let el of this.optionEls) {
       const letters = el.textContent.split('');
       const visible = el.classList.contains('ah-visible');
@@ -52,7 +57,7 @@ export default class Headline {
           letterEl.className = 'ah-in';
         }
 
-        if (rotate2) {
+        if (this.mode === 'rotate2') {
           let innerLetterEl = document.createElement('em');
           innerLetterEl.textContent = l;
           letterEl.appendChild(innerLetterEl);
@@ -65,7 +70,9 @@ export default class Headline {
     }
   }
 
-  animate() {
+  animate(autoplay) {
+    this.autoplay = autoplay;
+
     var duration = TIMING.ANIMATION_DELAY;
     const wwEl = this.wordsWrapperEl;
 
@@ -204,7 +211,14 @@ export default class Headline {
   }
 
   /**
-   * Shows the specified letter.
+   * Shows a letter.
+   *
+   * @param {Array} letterEls The list of letters.
+   * @param {number} index The index of the letter to show.
+   * @param {Element} wordEl The word element.
+   * @param {boolean} currentLonger Whether the current word is longer than the
+   *     next word.
+   * @param {number} duration The animation duration.
    */
   showLetter(letterEls, index, wordEl, currentLonger, duration) {
     this.cssToggle(letterEls[index], 'ah-in', 'ah-out');
